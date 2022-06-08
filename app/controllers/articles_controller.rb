@@ -7,8 +7,12 @@ class ArticlesController < ApplicationController
   end
 
   def show
-    article = Article.find(params[:id])
-    render json: article
+    page_views = sessions[:page_views]
+    if page_views > 4
+      article = Article.find(params[:id])
+      render json: article
+    else render json: {erorr: "You've already read 3 articles"}, status: 401
+  end
   end
 
   private
@@ -16,5 +20,6 @@ class ArticlesController < ApplicationController
   def record_not_found
     render json: { error: "Article not found" }, status: :not_found
   end
+
 
 end
